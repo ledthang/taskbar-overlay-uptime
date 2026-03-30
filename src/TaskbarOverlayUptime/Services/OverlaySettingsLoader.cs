@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text.Json;
+using TaskbarOverlayUptime.Infrastructure;
 using TaskbarOverlayUptime.Models;
 using TaskbarOverlayUptime.Services.Logging;
 
@@ -12,7 +13,8 @@ public sealed class OverlaySettingsLoader
     {
         PropertyNameCaseInsensitive = true,
         ReadCommentHandling = JsonCommentHandling.Skip,
-        AllowTrailingCommas = true
+        AllowTrailingCommas = true,
+        Converters = { new MonitorTypeJsonConverter() }
     };
 
     public OverlaySettingsLoader(string path)
