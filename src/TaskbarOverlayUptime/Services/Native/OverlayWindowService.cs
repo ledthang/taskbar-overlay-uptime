@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using TaskbarOverlayUptime.Services.Logging;
 
 namespace TaskbarOverlayUptime.Services.Native;
 
@@ -33,12 +34,14 @@ public sealed class OverlayWindowService
         }
 
         SetWindowLong(hwnd, GwlExstyle, exStyle);
+        AppLogger.Info($"ApplyOverlayStyle: hwnd={hwnd}, exStyle=0x{exStyle:X}, clickThrough={clickThrough}");
     }
 
     public void EnsureTopmost(Window window)
     {
         var hwnd = new WindowInteropHelper(window).Handle;
         SetWindowPos(hwnd, HwndTopmost, 0, 0, 0, 0, SwpNomove | SwpNosize | SwpNoactivate | SwpShowwindow);
+        AppLogger.Info($"EnsureTopmost: hwnd={hwnd}");
     }
 
     [DllImport("user32.dll")]

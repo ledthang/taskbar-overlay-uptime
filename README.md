@@ -75,6 +75,17 @@ Ví dụ đúng cho case của bạn:
 - Chỉ hiện tên target + chấm trạng thái (`xanh` = up, `đỏ` = down), không nền/không viền để cảm giác dính vào taskbar.
 - Khi đổi app, overlay tự re-assert topmost để tránh bị hide.
 
+## Debug log
+
+Nếu overlay không hiện, xem log runtime tại:
+- `logs/overlay.log` (trong thư mục chạy `.exe`)
+
+Log sẽ ghi:
+- settings đã load
+- toạ độ dock sau khi tính
+- topmost/style apply
+- event deactivate/minimize
+
 ## Roadmap next
 
 1. Add toast / tray notification khi service down.

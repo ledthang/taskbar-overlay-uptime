@@ -1,4 +1,5 @@
 using System.Windows;
+using TaskbarOverlayUptime.Services.Logging;
 
 namespace TaskbarOverlayUptime.Services.Native;
 
@@ -12,23 +13,28 @@ public sealed class TaskbarAnchorService
         const int margin = 8;
         const int overlap = 6;
 
+        AppLogger.Info($"DockToTaskbar called. overlayOnTaskbar={overlayOnTaskbar}, workArea={workArea}, screen={screenWidth}x{screenHeight}");
+
         if (!overlayOnTaskbar)
         {
             window.Left = workArea.Right - window.Width - margin;
             window.Top = workArea.Bottom - window.Height - margin;
+            AppLogger.Info($"Docked (workArea mode): left={window.Left}, top={window.Top}");
             return;
         }
 
-        // Infer taskbar edge from screen bounds vs work area and place overlay overlapping taskbar.
         var bottomThickness = screenHeight - workArea.Bottom;
         var topThickness = workArea.Top;
         var leftThickness = workArea.Left;
         var rightThickness = screenWidth - workArea.Right;
 
+        AppLogger.Info($"Taskbar thickness inference. bottom={bottomThickness}, top={topThickness}, left={leftThickness}, right={rightThickness}");
+
         if (bottomThickness >= topThickness && bottomThickness >= leftThickness && bottomThickness >= rightThickness)
         {
             window.Left = workArea.Right - window.Width - margin;
             window.Top = workArea.Bottom - window.Height + overlap;
+            AppLogger.Info($"Docked (bottom): left={window.Left}, top={window.Top}");
             return;
         }
 
@@ -36,6 +42,7 @@ public sealed class TaskbarAnchorService
         {
             window.Left = workArea.Right - window.Width - margin;
             window.Top = workArea.Top - overlap;
+            AppLogger.Info($"Docked (top): left={window.Left}, top={window.Top}");
             return;
         }
 
@@ -43,10 +50,12 @@ public sealed class TaskbarAnchorService
         {
             window.Left = workArea.Left - overlap;
             window.Top = workArea.Bottom - window.Height - margin;
+            AppLogger.Info($"Docked (left): left={window.Left}, top={window.Top}");
             return;
         }
 
         window.Left = workArea.Right - window.Width + overlap;
         window.Top = workArea.Bottom - window.Height - margin;
+        AppLogger.Info($"Docked (right): left={window.Left}, top={window.Top}");
     }
 }
