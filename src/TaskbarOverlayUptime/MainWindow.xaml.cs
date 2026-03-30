@@ -19,7 +19,7 @@ public partial class MainWindow : Window
 
         AppLogger.Info($"App start. Log file: {AppLogger.GetLogPath()}");
 
-        var settings = new OverlaySettingsLoader("Config/overlay-settings.json").LoadAsync().GetAwaiter().GetResult();
+        var settings = new OverlaySettingsLoader("Config/overlay-settings.json").Load();
         AppLogger.Info($"Settings loaded: width={settings.Width}, height={settings.Height}, resize={settings.AllowResize}, overlayOnTaskbar={settings.OverlayOnTaskbar}");
 
         Width = settings.Width;

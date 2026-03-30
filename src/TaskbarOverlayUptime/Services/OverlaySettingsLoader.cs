@@ -13,19 +13,26 @@ public sealed class OverlaySettingsLoader
         _path = path;
     }
 
-    public async Task<OverlaySettings> LoadAsync()
+    public OverlaySettings Load()
     {
         if (!File.Exists(_path))
         {
             return new OverlaySettings();
         }
 
-        await using var stream = File.OpenRead(_path);
-        var loaded = await JsonSerializer.DeserializeAsync<OverlaySettings>(stream, new JsonSerializerOptions
+        try
         {
-            PropertyNameCaseInsensitive = true
-        });
+            var json = File.ReadAllText(_path);
+            var loaded = JsonSerializer.Deserialize<OverlaySettings>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
 
-        return loaded ?? new OverlaySettings();
+            return loaded ?? new OverlaySettings();
+        }
+        catch
+        {
+            return new OverlaySettings();
+        }
     }
 }
