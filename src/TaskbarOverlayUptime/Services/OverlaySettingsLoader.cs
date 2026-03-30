@@ -23,12 +23,12 @@ public sealed class OverlaySettingsLoader
         try
         {
             var json = File.ReadAllText(_path);
-            var loaded = JsonSerializer.Deserialize<OverlaySettings>(json, new JsonSerializerOptions
+            var loaded = JsonSerializer.Deserialize<AppConfig>(json, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
 
-            return loaded ?? new OverlaySettings();
+            return loaded?.Overlay ?? new OverlaySettings();
         }
         catch
         {

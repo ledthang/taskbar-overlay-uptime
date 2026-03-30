@@ -8,35 +8,30 @@
         Width="420"
         Height="32"
         MinWidth="220"
-        MinHeight="28"
         WindowStyle="None"
-        ResizeMode="CanResizeWithGrip"
+        ResizeMode="NoResize"
         ShowInTaskbar="False"
         Topmost="True"
         Background="Transparent"
         AllowsTransparency="True">
     <Border Background="Transparent" BorderThickness="0" CornerRadius="0" Padding="2,0">
-        <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                      VerticalScrollBarVisibility="Hidden"
-                      MaxHeight="{Binding MaxContentHeight}">
-            <ItemsControl ItemsSource="{Binding Cards}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,14,3" VerticalAlignment="Center">
-                            <Ellipse Width="8" Height="8" Fill="{Binding StatusColor}" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                            <TextBlock Text="{Binding Name}"
-                                       Foreground="White"
-                                       FontSize="{Binding DataContext.DisplayFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
-                                       VerticalAlignment="Center" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+        <ItemsControl ItemsSource="{Binding Cards}" MaxHeight="{Binding MaxContentHeight}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,14,2" VerticalAlignment="Center">
+                        <Ellipse Width="8" Height="8" Fill="{Binding StatusColor}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="{Binding Name}"
+                                   Foreground="White"
+                                   FontSize="{Binding DataContext.DisplayFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Border>
 </Window>

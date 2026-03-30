@@ -14,20 +14,27 @@ public sealed class NodeRegistry
         _path = path;
     }
 
-    public async Task<IReadOnlyList<MonitorTarget>> LoadTargetsAsync()
+    public Task<IReadOnlyList<MonitorTarget>> LoadTargetsAsync()
     {
         if (!File.Exists(_path))
         {
-            return Array.Empty<MonitorTarget>();
+            return Task.FromResult<IReadOnlyList<MonitorTarget>>(Array.Empty<MonitorTarget>());
         }
 
-        await using var stream = File.OpenRead(_path);
-        var targets = await JsonSerializer.DeserializeAsync<List<MonitorTarget>>(stream, new JsonSerializerOptions
+        try
         {
-            PropertyNameCaseInsensitive = true,
-            Converters = { new JsonStringEnumConverter() }
-        });
+            var json = File.ReadAllText(_path);
+            var config = JsonSerializer.Deserialize<AppConfig>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                Converters = { new JsonStringEnumConverter() }
+            });
 
-        return targets is null ? Array.Empty<MonitorTarget>() : targets;
+            return Task.FromResult<IReadOnlyList<MonitorTarget>>(config?.Targets ?? []);
+        }
+        catch
+        {
+            return Task.FromResult<IReadOnlyList<MonitorTarget>>(Array.Empty<MonitorTarget>());
+        }
     }
 }

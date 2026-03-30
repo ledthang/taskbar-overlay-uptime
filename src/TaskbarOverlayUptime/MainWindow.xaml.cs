@@ -19,14 +19,12 @@ public partial class MainWindow : Window
 
         AppLogger.Info($"App start. Log file: {AppLogger.GetLogPath()}");
 
-        var settings = new OverlaySettingsLoader("Config/overlay-settings.json").Load();
-        AppLogger.Info($"Settings loaded: width={settings.Width}, height={settings.Height}, resize={settings.AllowResize}, overlayOnTaskbar={settings.OverlayOnTaskbar}");
+        var settings = new OverlaySettingsLoader("Config/appsettings.json").Load();
+        AppLogger.Info($"Settings loaded: fontSize={settings.FontSize}, maxRows={settings.MaxRows}, rightPadding={settings.RightPadding}, overlayOnTaskbar={settings.OverlayOnTaskbar}");
 
-        Width = settings.Width;
-        Height = settings.Height;
-        ResizeMode = settings.AllowResize ? ResizeMode.CanResizeWithGrip : ResizeMode.NoResize;
+        ResizeMode = ResizeMode.NoResize;
 
-        var registry = new NodeRegistry("Config/nodes.json");
+        var registry = new NodeRegistry("Config/appsettings.json");
         var pingMonitor = new PingMonitor();
         var serviceMonitor = new ServiceMonitor();
         var httpMonitor = new HttpMonitor();
@@ -51,7 +49,7 @@ public partial class MainWindow : Window
         Loaded += (_, _) =>
         {
             AppLogger.Info($"Loaded event before dock. Left={Left}, Top={Top}, Width={Width}, Height={Height}, WindowState={WindowState}");
-            anchorService.DockToTaskbar(this, settings.OverlayOnTaskbar);
+            anchorService.DockToTaskbar(this, settings.OverlayOnTaskbar, settings.RightPadding, settings.AutoRightPaddingFromTray);
             AppLogger.Info($"After dock. Left={Left}, Top={Top}, Width={Width}, Height={Height}");
             overlayWindowService.ApplyOverlayStyle(this, clickThrough: false);
             overlayWindowService.EnsureTopmost(this);
