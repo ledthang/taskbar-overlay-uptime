@@ -1,0 +1,8 @@
+{
+  "fontSize": 11,
+  "maxRows": 1,
+  "width": 420,
+  "height": 32,
+  "allowResize": false,
+  "overlayOnTaskbar": true
+}

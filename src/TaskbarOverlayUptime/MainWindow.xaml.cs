@@ -14,6 +14,12 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
+        var settings = new OverlaySettingsLoader("Config/overlay-settings.json").LoadAsync().GetAwaiter().GetResult();
+
+        Width = settings.Width;
+        Height = settings.Height;
+        ResizeMode = settings.AllowResize ? ResizeMode.CanResizeWithGrip : ResizeMode.NoResize;
+
         var registry = new NodeRegistry("Config/nodes.json");
         var pingMonitor = new PingMonitor();
         var serviceMonitor = new ServiceMonitor();
@@ -22,13 +28,24 @@ public partial class MainWindow : Window
         var anchorService = new TaskbarAnchorService();
         var overlayWindowService = new OverlayWindowService();
 
-        var mainVm = new MainViewModel(registry, pingMonitor, serviceMonitor, httpMonitor, tcpMonitor);
+        var mainVm = new MainViewModel(registry, pingMonitor, serviceMonitor, httpMonitor, tcpMonitor, settings);
         DataContext = mainVm;
 
         Loaded += (_, _) =>
         {
-            anchorService.DockToTaskbar(this, overlayOnTaskbar: true);
+            anchorService.DockToTaskbar(this, settings.OverlayOnTaskbar);
             overlayWindowService.ApplyOverlayStyle(this, clickThrough: false);
+            overlayWindowService.EnsureTopmost(this);
+        };
+
+        Deactivated += (_, _) => overlayWindowService.EnsureTopmost(this);
+        StateChanged += (_, _) =>
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                WindowState = WindowState.Normal;
+                overlayWindowService.EnsureTopmost(this);
+            }
         };
 
         _scheduler = new MonitorScheduler(mainVm.RefreshAsync, TimeSpan.FromSeconds(10));

@@ -12,7 +12,7 @@ public sealed class MainViewModel
     private readonly HttpMonitor _httpMonitor;
     private readonly TcpMonitor _tcpMonitor;
 
-    public MainViewModel(NodeRegistry registry, PingMonitor pingMonitor, ServiceMonitor serviceMonitor, HttpMonitor httpMonitor, TcpMonitor tcpMonitor)
+    public MainViewModel(NodeRegistry registry, PingMonitor pingMonitor, ServiceMonitor serviceMonitor, HttpMonitor httpMonitor, TcpMonitor tcpMonitor, OverlaySettings settings)
     {
         _registry = registry;
         _pingMonitor = pingMonitor;
@@ -21,9 +21,17 @@ public sealed class MainViewModel
         _tcpMonitor = tcpMonitor;
 
         Cards = new ObservableCollection<MonitorCardViewModel>();
+        DisplayFontSize = settings.FontSize;
+        MaxRows = Math.Max(1, settings.MaxRows);
     }
 
     public ObservableCollection<MonitorCardViewModel> Cards { get; }
+
+    public double DisplayFontSize { get; }
+
+    public int MaxRows { get; }
+
+    public double MaxContentHeight => (DisplayFontSize + 10) * MaxRows;
 
     public async Task RefreshAsync()
     {

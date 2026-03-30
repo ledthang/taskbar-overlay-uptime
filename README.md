@@ -30,6 +30,26 @@ dotnet build TaskbarOverlayUptime.sln
 dotnet run --project src/TaskbarOverlayUptime/TaskbarOverlayUptime.csproj
 ```
 
+## Cấu hình overlay
+
+Sửa `src/TaskbarOverlayUptime/Config/overlay-settings.json`:
+
+```json
+{
+  "fontSize": 11,
+  "maxRows": 1,
+  "width": 420,
+  "height": 32,
+  "allowResize": false,
+  "overlayOnTaskbar": true
+}
+```
+
+- `fontSize`: cỡ chữ tên service/target
+- `maxRows`: số dòng tối đa trong overlay
+- `allowResize`: bật/tắt resize overlay trực tiếp
+- `width`/`height`: kích thước ban đầu
+
 ## Cấu hình monitor
 
 Sửa file `src/TaskbarOverlayUptime/Config/nodes.json`:
@@ -53,6 +73,7 @@ Ví dụ đúng cho case của bạn:
 
 - Overlay nằm ngay trên thanh taskbar (không nằm phía trên taskbar như kiểu widget thường).
 - Chỉ hiện tên target + chấm trạng thái (`xanh` = up, `đỏ` = down).
+- Khi đổi app, overlay tự re-assert topmost để tránh bị hide.
 
 ## Roadmap next
 

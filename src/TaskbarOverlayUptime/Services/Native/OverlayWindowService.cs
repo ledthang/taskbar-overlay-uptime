@@ -11,6 +11,12 @@ public sealed class OverlayWindowService
     private const int WsExLayered = 0x00080000;
     private const int WsExTransparent = 0x00000020;
 
+    private static readonly IntPtr HwndTopmost = new(-1);
+    private const uint SwpNomove = 0x0002;
+    private const uint SwpNosize = 0x0001;
+    private const uint SwpNoactivate = 0x0010;
+    private const uint SwpShowwindow = 0x0040;
+
     public void ApplyOverlayStyle(Window window, bool clickThrough)
     {
         var hwnd = new WindowInteropHelper(window).Handle;
@@ -29,9 +35,18 @@ public sealed class OverlayWindowService
         SetWindowLong(hwnd, GwlExstyle, exStyle);
     }
 
+    public void EnsureTopmost(Window window)
+    {
+        var hwnd = new WindowInteropHelper(window).Handle;
+        SetWindowPos(hwnd, HwndTopmost, 0, 0, 0, 0, SwpNomove | SwpNosize | SwpNoactivate | SwpShowwindow);
+    }
+
     [DllImport("user32.dll")]
     private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
     [DllImport("user32.dll")]
     private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 }
