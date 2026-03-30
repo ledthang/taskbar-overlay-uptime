@@ -15,7 +15,7 @@
         Topmost="True"
         Background="Transparent"
         AllowsTransparency="True">
-    <Border Background="#CC111827" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="8,4">
+    <Border Background="Transparent" BorderThickness="0" CornerRadius="0" Padding="2,0">
         <ScrollViewer HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Hidden"
                       MaxHeight="{Binding MaxContentHeight}">

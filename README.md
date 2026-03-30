@@ -72,7 +72,7 @@ Ví dụ đúng cho case của bạn:
 ## Minimal mode (đã bật mặc định)
 
 - Overlay nằm ngay trên thanh taskbar (không nằm phía trên taskbar như kiểu widget thường).
-- Chỉ hiện tên target + chấm trạng thái (`xanh` = up, `đỏ` = down).
+- Chỉ hiện tên target + chấm trạng thái (`xanh` = up, `đỏ` = down), không nền/không viền để cảm giác dính vào taskbar.
 - Khi đổi app, overlay tự re-assert topmost để tránh bị hide.
 
 ## Roadmap next
