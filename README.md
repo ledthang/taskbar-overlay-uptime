@@ -36,7 +36,7 @@ Sửa `src/TaskbarOverlayUptime/Config/appsettings.json`:
 
 ### Ý nghĩa
 - `fontSize`: cỡ chữ.
-- `maxRows`: số dòng tối đa trước khi bị cắt.
+- `maxRows`: số dòng hiển thị cố định (layout UniformGrid). Ví dụ `2` = chia item thành 2 hàng.
 - `allowResize`: hiện tại để `false` (đã tắt resize để tránh layout lỗi).
 - `overlayOnTaskbar`: neo vào dải taskbar.
 - `rightPadding`: chừa khoảng bên phải cho CONTENT (window vẫn neo sát mép phải).
@@ -44,7 +44,7 @@ Sửa `src/TaskbarOverlayUptime/Config/appsettings.json`:
 
 ## Hành vi UI
 - Không nền / không viền để cảm giác dính vào taskbar.
-- Content tự wrap xuống dòng theo bề ngang còn lại (sau khi trừ `rightPadding`), không dùng scrollbar ngang.
+- Layout tự chia item theo `maxRows` (không scrollbar ngang), tên dài sẽ ellipsis.
 - Chiều cao overlay sẽ cố bám theo độ dày taskbar (đặc biệt khi taskbar nằm dưới/trên).
 
 ## Debug log

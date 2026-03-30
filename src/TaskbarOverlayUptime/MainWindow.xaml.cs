@@ -33,6 +33,13 @@ public partial class MainWindow : Window
         var overlayWindowService = new OverlayWindowService();
 
         var resolvedRightPadding = anchorService.GetRecommendedRightPadding(settings.RightPadding, settings.AutoRightPaddingFromTray);
+        var maxPadding = Width * 0.45;
+        if (resolvedRightPadding > maxPadding)
+        {
+            AppLogger.Info($"Right padding clamped. before={resolvedRightPadding}, max={maxPadding}");
+            resolvedRightPadding = maxPadding;
+        }
+
         var mainVm = new MainViewModel(registry, pingMonitor, serviceMonitor, httpMonitor, tcpMonitor, settings, resolvedRightPadding);
         DataContext = mainVm;
 
