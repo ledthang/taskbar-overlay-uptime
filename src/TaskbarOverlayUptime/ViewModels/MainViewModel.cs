@@ -1,3 +1,4 @@
+using System.Windows;
 using System.Collections.ObjectModel;
 using TaskbarOverlayUptime.Models;
 using TaskbarOverlayUptime.Services.Monitoring;
@@ -12,7 +13,7 @@ public sealed class MainViewModel
     private readonly HttpMonitor _httpMonitor;
     private readonly TcpMonitor _tcpMonitor;
 
-    public MainViewModel(NodeRegistry registry, PingMonitor pingMonitor, ServiceMonitor serviceMonitor, HttpMonitor httpMonitor, TcpMonitor tcpMonitor, OverlaySettings settings)
+    public MainViewModel(NodeRegistry registry, PingMonitor pingMonitor, ServiceMonitor serviceMonitor, HttpMonitor httpMonitor, TcpMonitor tcpMonitor, OverlaySettings settings, double rightPadding)
     {
         _registry = registry;
         _pingMonitor = pingMonitor;
@@ -23,6 +24,7 @@ public sealed class MainViewModel
         Cards = new ObservableCollection<MonitorCardViewModel>();
         DisplayFontSize = settings.FontSize;
         MaxRows = Math.Max(1, settings.MaxRows);
+        ContentPadding = new Thickness(2, 0, rightPadding, 0);
     }
 
     public ObservableCollection<MonitorCardViewModel> Cards { get; }
@@ -32,6 +34,8 @@ public sealed class MainViewModel
     public int MaxRows { get; }
 
     public double MaxContentHeight => (DisplayFontSize + 10) * MaxRows;
+
+    public Thickness ContentPadding { get; }
 
     public async Task RefreshAsync()
     {

@@ -39,12 +39,12 @@ Sửa `src/TaskbarOverlayUptime/Config/appsettings.json`:
 - `maxRows`: số dòng tối đa trước khi bị cắt.
 - `allowResize`: hiện tại để `false` (đã tắt resize để tránh layout lỗi).
 - `overlayOnTaskbar`: neo vào dải taskbar.
-- `rightPadding`: chừa khoảng bên phải (tránh đè clock/system tray).
-- `autoRightPaddingFromTray`: tự ước lượng độ rộng khay hệ thống (TrayNotifyWnd) để cộng padding phải.
+- `rightPadding`: chừa khoảng bên phải cho CONTENT (window vẫn neo sát mép phải).
+- `autoRightPaddingFromTray`: tự ước lượng độ rộng khay hệ thống (TrayNotifyWnd) để set padding phải cho content.
 
 ## Hành vi UI
 - Không nền / không viền để cảm giác dính vào taskbar.
-- Không còn scrollbar ngang; content tự wrap sang dòng mới theo `maxRows`.
+- Content tự wrap xuống dòng theo bề ngang còn lại (sau khi trừ `rightPadding`), không dùng scrollbar ngang.
 - Chiều cao overlay sẽ cố bám theo độ dày taskbar (đặc biệt khi taskbar nằm dưới/trên).
 
 ## Debug log

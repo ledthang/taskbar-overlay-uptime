@@ -6,11 +6,26 @@ namespace TaskbarOverlayUptime.Services.Native;
 
 public sealed class TaskbarAnchorService
 {
-    public void DockToTaskbar(Window window, bool overlayOnTaskbar, double rightPadding, bool autoRightPaddingFromTray)
+    public double GetRecommendedRightPadding(double configuredPadding, bool autoRightPaddingFromTray)
+    {
+        var padding = Math.Max(0, configuredPadding);
+        if (!autoRightPaddingFromTray)
+        {
+            return padding;
+        }
+
+        var trayPadding = GetTrayPaddingEstimate();
+        var finalPadding = Math.Max(padding, trayPadding);
+        AppLogger.Info($"Right padding resolved. configured={configuredPadding}, tray={trayPadding}, final={finalPadding}");
+        return finalPadding;
+    }
+
+    public void DockToTaskbar(Window window, bool overlayOnTaskbar)
     {
         var workArea = SystemParameters.WorkArea;
         var screenWidth = SystemParameters.PrimaryScreenWidth;
         var screenHeight = SystemParameters.PrimaryScreenHeight;
+        const int rightMargin = 4;
 
         AppLogger.Info($"DockToTaskbar called. overlayOnTaskbar={overlayOnTaskbar}, workArea={workArea}, screen={screenWidth}x{screenHeight}");
 
@@ -19,17 +34,9 @@ public sealed class TaskbarAnchorService
         var leftThickness = workArea.Left;
         var rightThickness = screenWidth - workArea.Right;
 
-        var effectiveRightPadding = Math.Max(0, rightPadding);
-        if (autoRightPaddingFromTray)
-        {
-            var trayPadding = GetTrayPaddingEstimate();
-            effectiveRightPadding = Math.Max(effectiveRightPadding, trayPadding);
-            AppLogger.Info($"Auto tray padding enabled. trayPadding={trayPadding}, effectiveRightPadding={effectiveRightPadding}");
-        }
-
         if (!overlayOnTaskbar)
         {
-            window.Left = workArea.Right - window.Width - effectiveRightPadding;
+            window.Left = workArea.Right - window.Width - rightMargin;
             window.Top = workArea.Bottom - window.Height - 8;
             AppLogger.Info($"Docked (workArea mode): left={window.Left}, top={window.Top}");
             return;
@@ -40,8 +47,8 @@ public sealed class TaskbarAnchorService
         if (bottomThickness >= topThickness && bottomThickness >= leftThickness && bottomThickness >= rightThickness)
         {
             window.Height = Math.Max(28, bottomThickness);
-            window.Left = workArea.Right - window.Width - effectiveRightPadding;
-            window.Top = workArea.Bottom + Math.Max(0, (bottomThickness - window.Height) / 2.0);
+            window.Left = workArea.Right - window.Width - rightMargin;
+            window.Top = workArea.Bottom;
             AppLogger.Info($"Docked (bottom in-taskbar): left={window.Left}, top={window.Top}, height={window.Height}");
             return;
         }
@@ -49,7 +56,7 @@ public sealed class TaskbarAnchorService
         if (topThickness >= leftThickness && topThickness >= rightThickness)
         {
             window.Height = Math.Max(28, topThickness);
-            window.Left = workArea.Right - window.Width - effectiveRightPadding;
+            window.Left = workArea.Right - window.Width - rightMargin;
             window.Top = 0;
             AppLogger.Info($"Docked (top in-taskbar): left={window.Left}, top={window.Top}, height={window.Height}");
             return;
@@ -82,7 +89,7 @@ public sealed class TaskbarAnchorService
             return 0;
         }
 
-        return GetWindowRect(notify, out var rect) ? Math.Max(0, rect.Right - rect.Left) + 24 : 0;
+        return GetWindowRect(notify, out var rect) ? Math.Max(0, rect.Right - rect.Left) + 16 : 0;
     }
 
     [DllImport("user32.dll", CharSet = CharSet.Auto)]

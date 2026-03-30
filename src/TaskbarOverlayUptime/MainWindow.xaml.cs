@@ -32,7 +32,8 @@ public partial class MainWindow : Window
         var anchorService = new TaskbarAnchorService();
         var overlayWindowService = new OverlayWindowService();
 
-        var mainVm = new MainViewModel(registry, pingMonitor, serviceMonitor, httpMonitor, tcpMonitor, settings);
+        var resolvedRightPadding = anchorService.GetRecommendedRightPadding(settings.RightPadding, settings.AutoRightPaddingFromTray);
+        var mainVm = new MainViewModel(registry, pingMonitor, serviceMonitor, httpMonitor, tcpMonitor, settings, resolvedRightPadding);
         DataContext = mainVm;
 
         _topmostHeartbeat = new DispatcherTimer
@@ -49,7 +50,7 @@ public partial class MainWindow : Window
         Loaded += (_, _) =>
         {
             AppLogger.Info($"Loaded event before dock. Left={Left}, Top={Top}, Width={Width}, Height={Height}, WindowState={WindowState}");
-            anchorService.DockToTaskbar(this, settings.OverlayOnTaskbar, settings.RightPadding, settings.AutoRightPaddingFromTray);
+            anchorService.DockToTaskbar(this, settings.OverlayOnTaskbar);
             AppLogger.Info($"After dock. Left={Left}, Top={Top}, Width={Width}, Height={Height}");
             overlayWindowService.ApplyOverlayStyle(this, clickThrough: false);
             overlayWindowService.EnsureTopmost(this);
