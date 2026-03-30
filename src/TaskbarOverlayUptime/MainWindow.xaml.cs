@@ -27,7 +27,7 @@ public partial class MainWindow : Window
 
         Loaded += (_, _) =>
         {
-            anchorService.DockToTaskbar(this);
+            anchorService.DockToTaskbar(this, overlayOnTaskbar: true);
             overlayWindowService.ApplyOverlayStyle(this, clickThrough: false);
         };
 

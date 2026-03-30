@@ -3,44 +3,33 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="clr-namespace:TaskbarOverlayUptime.ViewModels"
         mc:Ignorable="d"
         Title="Taskbar Overlay Uptime"
-        Width="420"
-        Height="220"
+        Width="520"
+        Height="36"
         WindowStyle="None"
         ResizeMode="NoResize"
         ShowInTaskbar="False"
         Topmost="True"
-        Background="#111827"
+        Background="Transparent"
         AllowsTransparency="True">
-    <Border Background="#DD111827" BorderBrush="#1F2937" BorderThickness="1" CornerRadius="10" Padding="12">
-        <DockPanel>
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,8">
-                <TextBlock Text="Overlay Uptime" Foreground="White" FontSize="16" FontWeight="SemiBold" />
-                <TextBlock Text="  Auto refresh 10s" Foreground="#93C5FD" VerticalAlignment="Bottom" />
-            </StackPanel>
+    <Border Background="#CC111827" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="8,4">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
             <ItemsControl ItemsSource="{Binding Cards}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type vm:MonitorCardViewModel}">
-                        <Border Margin="0,0,0,8" Padding="8" CornerRadius="8" Background="#1F2937">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <StackPanel>
-                                    <TextBlock Text="{Binding Name}" Foreground="White" FontWeight="SemiBold" />
-                                    <TextBlock Text="{Binding Detail}" Foreground="#D1D5DB" FontSize="12" />
-                                </StackPanel>
-                                <Border Grid.Column="1" Padding="8,2" CornerRadius="6" Background="{Binding StatusColor}">
-                                    <TextBlock Text="{Binding StatusText}" Foreground="White" FontSize="12" />
-                                </Border>
-                            </Grid>
-                        </Border>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,14,0" VerticalAlignment="Center">
+                            <Ellipse Width="8" Height="8" Fill="{Binding StatusColor}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock Text="{Binding Name}" Foreground="White" FontSize="12" VerticalAlignment="Center" />
+                        </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </DockPanel>
+        </ScrollViewer>
     </Border>
 </Window>

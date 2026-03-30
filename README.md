@@ -1,6 +1,6 @@
 # Taskbar Overlay Uptime (WPF + .NET 8)
 
-Mini dashboard overlay cho Windows: luôn nổi, bám gần taskbar, auto refresh, theo dõi service/ping/http endpoint.
+Mini dashboard overlay cho Windows: luôn nổi, có chế độ minimal neo ngay trên thanh taskbar, auto refresh, theo dõi service/ping/http/tcp endpoint.
 
 ## Kiến trúc
 
@@ -15,7 +15,7 @@ Mini dashboard overlay cho Windows: luôn nổi, bám gần taskbar, auto refres
   - `MonitorScheduler` (`PeriodicTimer`, default 10s)
 - Native integration:
   - `OverlayWindowService` (tool window, click-through optional)
-  - `TaskbarAnchorService` (dock góc dưới-phải trong work area)
+  - `TaskbarAnchorService` (dock work area hoặc dock trực tiếp vào vùng taskbar)
 
 ## Chạy app
 
@@ -48,6 +48,11 @@ Sửa file `src/TaskbarOverlayUptime/Config/nodes.json`:
 Ví dụ đúng cho case của bạn:
 - Check HTTP: `{ "name": "Node HTTP", "type": "Http", "target": "http://10.241.2.163:8080/" }`
 - Check TCP port mở: `{ "name": "Node TCP", "type": "Tcp", "target": "10.241.2.163:8080" }`
+
+## Minimal mode (đã bật mặc định)
+
+- Overlay nằm ngay trên thanh taskbar (không nằm phía trên taskbar như kiểu widget thường).
+- Chỉ hiện tên target + chấm trạng thái (`xanh` = up, `đỏ` = down).
 
 ## Roadmap next
 
