@@ -28,6 +28,6 @@ public sealed class NodeRegistry
             Converters = { new JsonStringEnumConverter() }
         });
 
-        return targets ?? Array.Empty<MonitorTarget>();
+        return targets is null ? Array.Empty<MonitorTarget>() : targets;
     }
 }
