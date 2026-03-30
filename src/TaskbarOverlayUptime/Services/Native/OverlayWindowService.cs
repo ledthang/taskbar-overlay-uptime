@@ -15,7 +15,6 @@ public sealed class OverlayWindowService
     private static readonly IntPtr HwndTopmost = new(-1);
     private const uint SwpNomove = 0x0002;
     private const uint SwpNosize = 0x0001;
-    private const uint SwpNoactivate = 0x0010;
     private const uint SwpShowwindow = 0x0040;
 
     public void ApplyOverlayStyle(Window window, bool clickThrough)
@@ -40,7 +39,7 @@ public sealed class OverlayWindowService
     public void EnsureTopmost(Window window)
     {
         var hwnd = new WindowInteropHelper(window).Handle;
-        SetWindowPos(hwnd, HwndTopmost, 0, 0, 0, 0, SwpNomove | SwpNosize | SwpNoactivate | SwpShowwindow);
+        SetWindowPos(hwnd, HwndTopmost, 0, 0, 0, 0, SwpNomove | SwpNosize | SwpShowwindow);
         AppLogger.Info($"EnsureTopmost: hwnd={hwnd}");
     }
 

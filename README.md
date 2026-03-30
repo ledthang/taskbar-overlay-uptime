@@ -85,6 +85,9 @@ Log sẽ ghi:
 - toạ độ dock sau khi tính
 - topmost/style apply
 - event deactivate/minimize
+- topmost heartbeat mỗi 3 giây (để tránh bị tụt z-order)
+
+Kỳ vọng với taskbar nằm dưới: `Top` trong log sẽ gần `workArea.Bottom` (nằm trong dải taskbar).
 
 ## Roadmap next
 

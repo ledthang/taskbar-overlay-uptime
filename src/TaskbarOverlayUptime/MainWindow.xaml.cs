@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Threading;
 using TaskbarOverlayUptime.Services;
 using TaskbarOverlayUptime.Services.Logging;
 using TaskbarOverlayUptime.Services.Monitoring;
@@ -10,6 +11,7 @@ namespace TaskbarOverlayUptime;
 public partial class MainWindow : Window
 {
     private readonly MonitorScheduler _scheduler;
+    private readonly DispatcherTimer _topmostHeartbeat;
 
     public MainWindow()
     {
@@ -35,6 +37,17 @@ public partial class MainWindow : Window
         var mainVm = new MainViewModel(registry, pingMonitor, serviceMonitor, httpMonitor, tcpMonitor, settings);
         DataContext = mainVm;
 
+        _topmostHeartbeat = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(3)
+        };
+
+        _topmostHeartbeat.Tick += (_, _) =>
+        {
+            overlayWindowService.EnsureTopmost(this);
+            AppLogger.Info($"Topmost heartbeat. Left={Left}, Top={Top}, Width={Width}, Height={Height}");
+        };
+
         Loaded += (_, _) =>
         {
             AppLogger.Info($"Loaded event before dock. Left={Left}, Top={Top}, Width={Width}, Height={Height}, WindowState={WindowState}");
@@ -42,7 +55,8 @@ public partial class MainWindow : Window
             AppLogger.Info($"After dock. Left={Left}, Top={Top}, Width={Width}, Height={Height}");
             overlayWindowService.ApplyOverlayStyle(this, clickThrough: false);
             overlayWindowService.EnsureTopmost(this);
-            AppLogger.Info("Overlay style/topmost applied.");
+            _topmostHeartbeat.Start();
+            AppLogger.Info("Overlay style/topmost applied. Heartbeat started.");
         };
 
         Deactivated += (_, _) =>
@@ -67,7 +81,8 @@ public partial class MainWindow : Window
         Loaded += async (_, _) => await _scheduler.StartAsync();
         Closed += (_, _) =>
         {
-            AppLogger.Info("Window closed. Scheduler disposed.");
+            _topmostHeartbeat.Stop();
+            AppLogger.Info("Window closed. Scheduler disposed. Heartbeat stopped.");
             _scheduler.Dispose();
         };
     }
