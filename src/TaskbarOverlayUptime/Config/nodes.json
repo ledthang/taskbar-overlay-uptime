@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Internal API",
+    "type": "Http",
+    "target": "http://localhost:5000/health"
+  },
+  {
+    "name": "Redis Service",
+    "type": "Service",
+    "target": "Redis"
+  },
+  {
+    "name": "Public DNS",
+    "type": "Ping",
+    "target": "1.1.1.1"
+  }
+]
